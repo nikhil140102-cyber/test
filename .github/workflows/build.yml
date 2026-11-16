@@ -22,12 +22,12 @@ jobs:
     outputs:
       pages: ${{ steps.pages.outcome }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: '21'
 
       - uses: subosito/flutter-action@v2
         with:
@@ -41,20 +41,33 @@ jobs:
           fi
 
       - name: Download packages
-        run: flutter pub get
+        run: flutter pub get 2>&1 | tee -a build-log.txt
 
       - name: Prepare Android settings
-        run: dart tool/prepare_android.dart
+        run: dart tool/prepare_android.dart 2>&1 | tee -a build-log.txt
 
       - name: Automatic checks
         run: flutter test
         continue-on-error: true
 
       - name: Build Android app (APK)
-        run: flutter build apk --release
+        run: flutter build apk --release 2>&1 | tee -a build-log.txt
 
       - name: Build website
-        run: flutter build web --release --base-href "/${{ github.event.repository.name }}/"
+        run: flutter build web --release --base-href "/${{ github.event.repository.name }}/" 2>&1 | tee -a build-log.txt
+
+      - name: Show the error on the Summary page
+        if: failure()
+        run: |
+          {
+            echo '## The build failed'
+            echo 'Copy everything in the box below and send it for help.'
+            echo '```'
+            grep -iE 'error|exception|failed|what went wrong|lib/.*dart:' build-log.txt | grep -v 'continue-on-error' | tail -n 40 || true
+            echo '----- last lines -----'
+            tail -n 40 build-log.txt || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Keep the APK with this run
         uses: actions/upload-artifact@v4
