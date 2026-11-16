@@ -1,0 +1,7 @@
+# Analyzer settings for this generated app.
+# For stricter style checks: add flutter_lints to dev_dependencies in
+# pubspec.yaml and put this line at the top of this file:
+#   include: package:flutter_lints/flutter.yaml
+analyzer:
+  exclude:
+    - build/**

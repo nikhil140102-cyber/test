@@ -1,0 +1,18 @@
+[
+  ".github/workflows/build.yml",
+  "HOW_TO_RUN.md",
+  "README.md",
+  "lib/backend/api.dart",
+  "lib/backend/backend.dart",
+  "lib/backend/data_list.dart",
+  "lib/backend/page_actions.dart",
+  "lib/main.dart",
+  "lib/pages/addproduct_page.dart",
+  "lib/pages/entercode_page.dart",
+  "lib/pages/home_page.dart",
+  "lib/pages/signin_page.dart",
+  "run_mac_linux.sh",
+  "run_windows.bat",
+  "test/widget_test.dart",
+  "tool/prepare_android.dart"
+]
